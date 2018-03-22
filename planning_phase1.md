@@ -74,7 +74,7 @@ There are repeats, with different comparisons being used in the same function.
 1. [expandTypedef]({{site.swigrcxx}}#L233)
 1. [addCopyParameter]({{site.swigrcxx}}#L246)
 1. [functionWrapper]({{site.swigrcxx}}#L1723)
-1. [typedefHandler]({{site.swigrcxx}}#L2828)
+1. [typedefHandler]({{site.swigrcxx}}#L2628)
 
 ### _strcmp_
 
