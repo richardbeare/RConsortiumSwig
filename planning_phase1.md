@@ -85,3 +85,48 @@ There are repeats, with different comparisons being used in the same function.
 ### _strncmp_
 
 1. [getRClassNameCopyStruct]({{site.swigrcxx}}#L140)
+
+
+# Call graphs
+
+SWIGs build system allows tests to be run via callgrind. We can thus test which of the functions
+in the catalog are used by the current suite of R tests.
+
+``` bash
+# run r test suite with callgrind
+make check-r-test-suite SWIGTOOL="valgrind --tool=callgrind"
+```
+
+The resulting set of profile files are in `Examples/test-suite/r`,
+with names like `callgrind.out.12345`.
+
+KCachegrind can be used to examine them in detail. The header of each
+profile file lists the command used to create it, and can be used to
+identify the associated test.
+
+Grepping for the function names identified above indicates that the
+following functions are not tested during the R test suite. (confirmed
+with low-tech Printf).
+
+1. OutputArrayMethod
+1. OutputClassMemberTable
+1. getRTypeName
+1. getRClassNameCopyStruct
+
+Also confirmed that SimpleITK doesn't use these functions.
+
+TODO - write some tests or remove them.
+
+
+# Refactoring plans
+
+## Accessors
+
+The most obvious example of string comparisons, which has caused
+trouble with name clashes in SimpleITK is the automatically generated
+accessors, which end in `_set` and `_get`.
+
+Tests for this pattern are found in:
+
+1. 
+
