@@ -1,3 +1,6 @@
 theme: jekyll-theme-slate
 title: Refactoring and updating the SWIG R module
 description: Planning documents and updates on this R Infrastructure Steering Committee funded project
+swigrepo: https://github.com/richardbeare/swig/blob/
+swigtag: 6fac581a2b9517b8058f978ea5442026f1340753
+swigrcxx: https://github.com/richardbeare/swig/blob/6fac581a2b9517b8058f978ea5442026f1340753/Source/Modules/r.cxx
