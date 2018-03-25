@@ -117,6 +117,109 @@ Also confirmed that SimpleITK doesn't use these functions.
 
 TODO - write some tests or remove them.
 
+Note that there is a "debugMode" flag in the R module. Requires
+recompilation to enable.
+
+# Deeper description of the functions with string comparisons
+
+## getRTypeName (not covered by tests)
+
+Called from `processType`, which is labelled as _needs to be
+reworked_. Seems to be something of a backup if the swig type can't be
+resolved.
+
+String comparisons used to detect "struct ", "p." and "a(".
+
+No "struct " in R code, so this must be C, and probably swig generated
+C?
+
+`processType` is called from a few places
+
+## getRClassNameCopyStruct (not covered by tests)
+
+Called from `generateCopyRoutines`.  Need to confirm that
+generateCopyRoutines is covered by tests - looks important.
+
+Has a bunch of `#if` macros. The remaining part is using comparisons
+to lookf for, "struct ", "p."  and "a(", same as getRTypeName. 
+
+## createFunctionPointerHandler
+
+Checks for "void" return type. Elsewhere in the function the _Cmp_
+option is used, which appears to be a more appropriate option.
+
+## OutputArrayMethod (not covered by tests)
+
+Calls to this function are all commented out - thus may not be
+used. However most likely it is called from the parent class.
+
+Comments say that is is creating R bracket operators for arrays.
+
+Checking for "__setitem__" and "__getitem__".
+
+## enumDeclaration
+
+Called from the parent class, presumably.
+
+Comparisons used to check something about typedef name. Then in bunch
+of hacks to deal with complex enum cases.
+
+Note: attempting to fix this function a few years back was what got me
+into this mess!.
+
+## addAccessor
+
+Tests for names ending in "_set".
+
+Called from `functionWrapper`.
+
+## Swig\_overload\_rank
+
+Complex set of tests about precedence.
+
+Called from `dispatchFunction`.
+
+## dispatchFunction
+
+Called from `functionWrapper`.
+
+Comparisons used to test R type names.
+
+## functionWrapper
+
+Tests for "_set", "void" return, leading "arg".
+
+## registerClass
+
+Checks for "class".
+
+## classDeclaration
+
+Checks for "typedef", matching tdname,
+
+
+## generateCopyRoutines
+
+Checks for character typemap
+
+## replaceInitialDash
+Testing for the initial dash.
+
+## expandTypedef
+
+checks for "f" and "p.f" prefix.
+
+## addCopyParameter
+
+Checking type for "struct", "p.struct", "p.".
+
+## typedefHandler
+
+Tests for "struct ".
+
+## OutputMemberReferenceMethod
+
+Looks for "get" (note - not "_get"), and various forms of "operator".
 
 # Refactoring plans
 
