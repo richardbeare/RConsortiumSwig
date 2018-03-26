@@ -221,15 +221,51 @@ Tests for "struct ".
 
 Looks for "get" (note - not "_get"), and various forms of "operator".
 
-# Refactoring plans
+# Accessors - closer investigation
 
-## Accessors
+Now looking in detail at a simple case that causes accessor functions
+to be created. The test "struct_value.i" features a pair of nested
+structures:
+``` c
 
-The most obvious example of string comparisons, which has caused
-trouble with name clashes in SimpleITK is the automatically generated
-accessors, which end in `_set` and `_get`.
+struct Foo {
+   int x;
+};
 
-Tests for this pattern are found in:
+struct Bar {
+   Foo   a;
+   struct Foo b;
+};
 
-1. 
+```
+
+The generate R code includes accessor functions named _Bar\_a\_get_, _Bar\_a\_set_ etc.
+
+How does this happen?
+
+membervariableHandler sets a flag indicating that it is processing
+class or structure members, calls its superclass, then resets the
+flag. The Java module uses a similar approach.
+
+The superclass (common to all languages) sets an attribute called
+"memberset", which is deleted later. The code in R::functionWrapper
+should check this attribute instead of the symbol name. Similar
+approach for read accessors. Same approach to be used across all
+situations in which symbol names are tested for "set/get" suffixes.
+
+addAccessor is called later on, also from functionWrapper, and builds
+the R function code. It can also use the attributes. Need to be a bit
+careful here as it seems to handle set and get methods, but only tests for _set suffixes.
+
+## Accessor refactoring plans
+
+### Extended tests
+
+Include tests that break the current implementation by including
+member variables with "_set" and "_get" suffixes. 
+
+### Changes
+
+Use memberset and memberget attributes everywhere.
+
 
