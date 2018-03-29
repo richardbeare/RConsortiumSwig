@@ -221,7 +221,14 @@ Tests for "struct ".
 
 Looks for "get" (note - not "_get"), and various forms of "operator".
 
-# Accessors - closer investigation
+# Plans
+
+## Test coverage
+
+Need to extend tests to include those functions not currently
+tested. If not possible, then the functions may be redundant.
+
+## Accessors - closer investigation
 
 Now looking in detail at a simple case that causes accessor functions
 to be created. The test "struct_value.i" features a pair of nested
@@ -257,15 +264,73 @@ addAccessor is called later on, also from functionWrapper, and builds
 the R function code. It can also use the attributes. Need to be a bit
 careful here as it seems to handle set and get methods, but only tests for _set suffixes.
 
-## Accessor refactoring plans
+_OutputMemberReferenceMethod_ is called twice from _classDeclaration_ - each
+time with explicit values for the _isSet_ argument, depending on
+settings of _class\_member\_functions_ and
+_class\_member\_set\_functions_, the two lists which are set up in
+_addAccessor_. Also called from _OutputClassMemberTable_.
 
-### Extended tests
+### Accessor refactoring plans
+
+#### Extended tests
 
 Include tests that break the current implementation by including
 member variables with "_set" and "_get" suffixes. 
 
-### Changes
+#### Changes
 
 Use memberset and memberget attributes everywhere.
 
 
+### Function return type refactoring
+
+The _R::createFunctionPointerHandler_ uses Strcmp to check for a void
+return type. The [first]({{site.swigrcxx}}#L566) comes into play at
+the end of the function, indicating that a return typename needs to be
+processed. There's [another use]({{site.swigrcxx}}#L625), checking for
+void parameters.
+
+The java code doesn't do things in the same way. In general it uses
+"Cmp" instead of Strcmp. This is a subtle detail that I'll need to
+work on. There doesn't appear to be a special SWIG way of checking for
+void return.
+
+#### Actions
+
+Further searching and queries to developers.
+
+## Name mangling
+
+A moderate amount of code is used to construct names that encode
+types. For example, _getRClassNameCopyStruct_ constructs R class names
+based on C types. There are [string
+operations]({{site.swigrcxx}}#L156) use to do this. However SWIG
+provides operations for this purpose - e.g _SwigType\_ispointer_. The
+correct tests are used intermittently in the module.
+
+
+## SWIG generate R code
+
+### General comments
+
+Classes and and structures have an R side class definition, usually with 
+
+R classes are prefixed with "_p", and inherit from a C++ reference
+base class. The class names gets used in attributes of functions
+associated with that class.
+
+SWIG generated R functions have attributes describing input and return types.
+
+There is extra complexity around enumerated types, which have a
+related structure. There's a typemap that uses the R\_class attribute to
+decide which enumeration is being looked up.
+
+Thus, changing name generation procedures has to be done
+carefully. This is need to do things like implement the \%nspace
+feature, which toggles inclusion of namespaces in mangled names.
+
+#### Action 
+
+Search and make sure all mangling is done to SWIG standards.
+
+Implement the \%nspace feature.
