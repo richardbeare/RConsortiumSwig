@@ -141,7 +141,7 @@ Called from `generateCopyRoutines`.  Need to confirm that
 generateCopyRoutines is covered by tests - looks important.
 
 Has a bunch of `#if` macros. The remaining part is using comparisons
-to lookf for, "struct ", "p."  and "a(", same as getRTypeName. 
+to look for, "struct ", "p."  and "a(", same as getRTypeName. 
 
 ## createFunctionPointerHandler
 
@@ -326,11 +326,11 @@ related structure. There's a typemap that uses the R\_class attribute to
 decide which enumeration is being looked up.
 
 Thus, changing name generation procedures has to be done
-carefully. This is need to do things like implement the \%nspace
+carefully. This is need to do things like implement the %nspace
 feature, which toggles inclusion of namespaces in mangled names.
 
 #### Action 
 
 Search and make sure all mangling is done to SWIG standards.
 
-Implement the \%nspace feature.
+Implement the %nspace feature.
