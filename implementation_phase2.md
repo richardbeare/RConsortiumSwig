@@ -134,3 +134,11 @@ There were also some refactoring to use services provided by the core
 swig infrastructure, such as registration of appropriate wrapper
 names, rather than replacing later and use of built in calls to return
 names of accessors.
+
+## Documentation
+
+There has proved to be less need for increased documentation than
+expected, as the project has evolved into a combination of essential
+bug fixes as well as refactoring. The content of the PRs, issues and
+this document will form the basis of documentation for enumeration
+framework as soon as maintainers have approved the PR.
